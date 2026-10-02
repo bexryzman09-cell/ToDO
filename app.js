@@ -1,4 +1,4 @@
-// ---------- календарь ----------
+
 var today = new Date();
 var viewYear = today.getFullYear();
 var viewMonth = today.getMonth();
@@ -9,7 +9,7 @@ var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
 var calendarDays = document.getElementById('calendarDays');
 var monthText = document.getElementById('monthText');
 
-// номер недели в году
+
 function getWeek(date) {
     var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     var dayNum = d.getUTCDay() || 7;
@@ -23,7 +23,7 @@ function showCalendar() {
     calendarDays.innerHTML = '';
 
     var first = new Date(viewYear, viewMonth, 1);
-    var start = first.getDay() || 7; // понедельник = 1
+    var start = first.getDay() || 7;
     var cursor = new Date(viewYear, viewMonth, 1 - (start - 1));
 
     for (var week = 0; week < 6; week++) {
@@ -60,14 +60,14 @@ document.getElementById('nextBtn').onclick = function () {
     showCalendar();
 };
 
-// дата сверху
+
 document.getElementById('dayName').textContent = dayNames[today.getDay()];
 var dd = String(today.getDate()).padStart(2, '0');
 document.getElementById('dateText').textContent = dd + ', ' + monthNames[today.getMonth()] + ' ' + today.getFullYear();
 
 showCalendar();
 
-// ---------- todo ----------
+
 var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 var created = Number(localStorage.getItem('created')) || tasks.length;
 var shown = 4;
@@ -76,10 +76,7 @@ var form = document.getElementById('taskForm');
 var titleInput = document.getElementById('taskTitle');
 var textInput = document.getElementById('taskText');
 var taskList = document.getElementById('taskList');
-var statusSelect = document.getElementById('statusSelect');
-var sortSelect = document.getElementById('sortSelect');
-var searchInput = document.getElementById('searchInput');
-var loadBtn = document.getElementById('loadBtn');
+
 
 function save() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -89,13 +86,8 @@ function save() {
 function showTasks() {
     var list = tasks.slice();
 
-    if (statusSelect.value === 'done') list = list.filter(function (t) { return t.done; });
-    if (statusSelect.value === 'pending') list = list.filter(function (t) { return !t.done; });
 
-    var word = searchInput.value.toLowerCase();
-    if (word) list = list.filter(function (t) { return t.title.toLowerCase().indexOf(word) !== -1; });
-
-    if (sortSelect.value === 'new') list.reverse();
+   
 
     taskList.innerHTML = '';
 
@@ -117,7 +109,7 @@ function showTasks() {
             '<button class="task-btn" data-act="edit" title="Edit"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg></button>' +
             '<button class="task-btn" data-act="delete" title="Delete"><svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13M10 11v6M14 11v6"/></svg></button>' +
             '</div>';
-        // textContent чтобы текст не ломал html
+
         card.querySelector('.task-title').textContent = t.title;
         card.querySelector('.task-text').textContent = t.text;
 
@@ -138,9 +130,9 @@ function showTasks() {
         taskList.appendChild(card);
     });
 
-    loadBtn.style.display = list.length > shown ? 'block' : 'none';
 
-    // счётчики
+
+
     var doneNum = tasks.filter(function (t) { return t.done; }).length;
     document.getElementById('doneCount').textContent = String(doneNum).padStart(2, '0');
     document.getElementById('pendingCount').textContent = String(tasks.length - doneNum).padStart(2, '0');
@@ -171,11 +163,5 @@ form.onsubmit = function (e) {
     titleInput.value = '';
     textInput.value = '';
     update();
-};
-
-loadBtn.onclick = function () { shown += 4; showTasks(); };
-statusSelect.onchange = function () { shown = 4; showTasks(); };
-sortSelect.onchange = showTasks;
-searchInput.oninput = function () { shown = 4; showTasks(); };
-
+};  
 showTasks();
